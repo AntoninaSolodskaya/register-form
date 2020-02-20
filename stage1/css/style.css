@@ -1,7 +1,3 @@
-.hide {
-    display: none !important;
-}
-
 .wrapper {
     padding: 25px;
     display: flex;
@@ -14,6 +10,12 @@
     padding: 20px;
     text-align: center;
     color: #1E90FF;
+}
+
+.error-block {
+    width: 50%;
+    margin: 0 auto;
+    color: #FF0000;
 }
 
 .wrapInput {
