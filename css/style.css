@@ -1,0 +1,33 @@
+.wrapper {
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.title {
+    margin-top: 65px;
+    padding: 20px;
+    text-align: center;
+    color: #1E90FF;
+}
+
+.error-block {
+    width: 50%;
+    margin: 0 auto;
+    color: #FF0000;
+}
+
+.wrapInput {
+    display: flex;
+}
+
+.wrapBtn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.error {
+    color: #FF0000;
+}
