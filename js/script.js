@@ -53,7 +53,7 @@ function validateFileUpload() {
 
 
 function myFunction($name) {
-    const fileInput = document.getElementById('customFile');
+    const fileInput = document.getElementById('file');
     const file = fileInput.value.split("\\");
     const fileName = file[file.length - 1];
 
@@ -62,18 +62,18 @@ function myFunction($name) {
         "Phone: " + Object.values(document.getElementsByClassName('phone')).map(function (element) {
             return element.value
         }).join(', ') + "<br/>" +
-        "Age: " + document.getElementById('inputAge').value + "<br/>" +
+        "Age: " + document.getElementById('age').value + "<br/>" +
         "Photo: " + fileName + "<br/>" +
-        "Summary: " + document.getElementById('textareaSummary').value.trim();
+        "Summary: " + document.getElementById('summary').value.trim();
     document.getElementById("demo").innerHTML = elem;
 }
 
 function validateForm() {
     const email = document.register.email.value;
     const name = document.register.username.value;
-    const age = document.getElementById('inputAge').value;
+    const age = document.getElementById('ge').value;
     const phones = Object.values(document.getElementsByClassName('phone'));
-    const summary = document.getElementById('textareaSummary');
+    const summary = document.getElementById('summary');
     let nameErr = emailErr = ageErr = summaryErr = phoneErr = true;
     let regex;
 

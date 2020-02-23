@@ -36,33 +36,33 @@
     </div>
 </nav>
 <div class="d-flex flex-md-column flex-nowrap h-100">
-    <!-- <h1 class="title">Register Form</h1> -->
+    <h1 class="title">Register Form</h1>
     <div class="d-flex justify-content-center shadow p-3 mb-5 mt-5 bg-white rounded formBlock" style="margin: 0 auto; width: 40%;">
         <form name="register" id="auth" class="p-lg-3" action="" method="post" onsubmit="return validateForm()"
               enctype="multipart/form-data">
             <div class="form-group mb-3">
-                <label for="inputName">Name:</label>
+                <label for="name">Name:</label>
                 <input 
                     type="text" 
                     name="username" 
                     class="form-control" 
-                    id="inputName" 
-                    aria-describedby="nameHelp"
-                    onchange="myFunction('inputName')"
+                    id="name" 
+                    onchange="myFunction('name')"
+                    onkeyup="myFunction('name')" 
                 >
                 <div class="error" id="nameErr"></div>
             </div>
 
             <div class="form-group mb-3">
-                <label for="inputEmail">Email:</label>
+                <label for="email">Email:</label>
                 <input 
                     type="email" 
                     name="email" 
                     class="form-control" 
                     id="inputEmail" 
-                    aria-describedby="emailHelp"
-                    onchange="myFunction('inputEmail')"
-                       >
+                    onchange="myFunction('email')"
+                    onkeyup="myFunction('email')" 
+                >
                 <div class="error" id="emailErr"></div>
             </div>
 
@@ -79,23 +79,22 @@
             </div>
 
             <div class="form-group mb-4">
-                <label for="inputAge">Age:</label>
+                <label for="age">Age:</label>
                 <input
                     type="number"
                     name="age"
                     class="form-control"
-                    id="inputAge"
-                    aria-describedby="ageHelp"
-                    onchange="myFunction('inputAge')" 
-                    onclick="(e) = {e.preventDefault(); e.stopPropagation();}"
-                >
+                    id="age"
+                    onchange="myFunction('age')" 
+                    onkeyup="myFunction('age')" 
+                  
+                />
                 <div class="error" id="ageErr"></div>
             </div>
 
             <div class="custom-file mb-5">
-                <input type="file" class="custom-file-input" id="customFile" name="photo"
-                       onchange="validateFileUpload()">
-                <label class="custom-file-label" for="customFile">Choose file</label>
+                <input type="file" class="custom-file-input" id="file" name="photo">
+                <label class="custom-file-label" for="file">Choose file</label>
                 <small id="passwordHelpInline" class="text-muted">
                     Upload image only jpeg, jpg and png formats
                 </small>
@@ -103,13 +102,14 @@
             </div>
             <div id="imagePreview"></div>
             <div class="form-group mb-5">
-                <label for="textareaSummary">Summary:</label>
+                <label for="summary">Summary:</label>
                 <textarea 
                     class="form-control" 
                     name="summary" 
-                    id="textareaSummary" 
+                    id="summary" 
                     rows="3" 
-                    onchange="myFunction('textareaSummary')"
+                    onchange="myFunction('summary')" 
+                    onkeyup="myFunction('summary')" 
                 ></textarea>
                 <div class="error" id="summaryErr"></div>
             </div>
@@ -153,8 +153,8 @@ $(document).ready(function () {
       +"<div class='wrapInput'>"
       +"<input type='text' name='phone["+counter+"]' id='" + id + "' class='form-control phone' placeholder='Enter your phone' onchange='myFunction(\"" + id + "\")'>"
       +"<button class='btn btn-danger deleteBtn' style='margin-left: 20px;' name='delete' onclick='removeNode(this.parentNode)' >Delete</button>"
+      +"<div id='phoneErr'></div>"
       +"</div>"
-      +"<div class='error' id='phoneErr'></div>"
       +"</div>";
 
     element.insertAdjacentHTML("afterend",new_entry);
@@ -164,16 +164,38 @@ $(document).ready(function () {
     el.remove();
   }
 
+  function printError(elemId, hintMsg) {
+    let error = document.getElementById(elemId);
+    error.innerHTML = hintMsg;
+}
 
-function validateFileUpload() {
-    const fileInput = document.getElementById('customFile');
+
+function myFunction($name) {
+    const fileInput = document.getElementById('file');
+    const file = fileInput.value.split("\\");
+    const fileName = file[file.length - 1];
+
+    document.getElementById($name + 'Err').innerHTML = '';
+
+    const elem = "Name: " + document.register.username.value + "<br/>" +
+        "Email: " + document.register.email.value + "<br/>" +
+        "Phone: " + Object.values(document.getElementsByClassName('phone')).map(function (element) {
+            return element.value
+        }).join(', ') + "<br/>" +
+        "Age: " + document.getElementById('age').value + "<br/>" +
+        "Photo: " + fileName + "<br/>" +
+        "Summary: " + document.getElementById('summary').value.trim();
+    document.getElementById("demo").innerHTML = elem;
+}
+
+$("#file").on("change", function(e){
+    e.preventDefault();
+    const fileInput = document.getElementById('file');
     const filePath = fileInput.value;
     const allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
-  
     if (!allowedExtensions.exec(filePath)) {
-      alert('Please upload file having extensions .jpeg/.jpg/.png/.gif only.');
+      printError("fileErr", "File cannot be empty");
       fileInput.value = '';
-      return false;
     } else {
       if (fileInput.files && fileInput.files[0]) {
         const reader = new FileReader();
@@ -182,39 +204,23 @@ function validateFileUpload() {
         };
         reader.readAsDataURL(fileInput.files[0]);
       }
-    }
-    myFunction('imagePreview');
-  }
+      if(!filePath || filePath === "") {
+          alert('dfgfd')
+      }
+      fileErr = false;
+    } 
+    myFunction('file'); 
+});
 
-  function printError(elemId, hintMsg) {
-    let error = document.getElementById(elemId);
-    error.innerHTML = hintMsg;
-}
-
-
-function myFunction($name) {
-    const fileInput = document.getElementById('customFile');
-    const file = fileInput.value.split("\\");
-    const fileName = file[file.length - 1];
-
-    const elem = "Name: " + document.register.username.value + "<br/>" +
-        "Email: " + document.register.email.value + "<br/>" +
-        "Phone: " + Object.values(document.getElementsByClassName('phone')).map(function (element) {
-            return element.value
-        }).join(', ') + "<br/>" +
-        "Age: " + document.getElementById('inputAge').value + "<br/>" +
-        "Photo: " + fileName + "<br/>" +
-        "Summary: " + document.getElementById('textareaSummary').value.trim();
-    document.getElementById("demo").innerHTML = elem;
-}
 
 function validateForm() {
     const email = document.register.email.value;
     const name = document.register.username.value;
-    const age = document.getElementById('inputAge').value;
-    const phones = Object.values(document.getElementsByClassName('phone'));
-    const summary = document.getElementById('textareaSummary');
-    let nameErr = emailErr = ageErr = summaryErr = phoneErr = true;
+    const age = document.getElementById('age').value;
+    const phones =  Object.values(document.getElementsByClassName('phone')).map(function (element) {return element.value})
+    const file = document.getElementById('file');
+    const summary = document.getElementById('summary');
+    let nameErr = emailErr = ageErr = summaryErr = phoneErr = fileErr = true;
     let regex;
 
     if (name === "") {
@@ -247,17 +253,21 @@ function validateForm() {
         }
     }
 
-    if (!phones.value) {
-        printError("phoneErr", "Phone cannot be empty");
+    if (file.value === "") {
+        printError("fileErr", "Please upload image");
+    } else {
+        fileErr = false;
     }
-    else if (phones.value) {
-        regex = /^[+]?(1\-|1\s|1|\d{3}\-|\d{3}\s|)?((\(\d{3}\))|\d{3})(\-|\s)?(\d{3})(\-|\s)?(\d{4})$/g;
-        if (regex.test(phones.value) === false) {
-            printError("phoneErr", "Invalid phone format");
-        } else {
-            phoneErr = false;
-        }
+
+    
+    regex = /^[+]?(1\-|1\s|1|\d{3}\-|\d{3}\s|)?((\(\d{3}\))|\d{3})(\-|\s)?(\d{3})(\-|\s)?(\d{4})$/g;
+    
+    if (regex.test(phones.value) === false) {
+        printError("phoneErr", "Invalid phone format");
+    } else {
+        phoneErr = false;
     }
+    
 
     if (summary.value.trim() === '') {
         printError("summaryErr", "Summary cannot be empty");
@@ -265,7 +275,7 @@ function validateForm() {
         summaryErr = false;
     }
 
-    if ((nameErr || emailErr || ageErr || summaryErr || phoneErr) === true) {
+    if ((nameErr || emailErr || ageErr || summaryErr || phoneErr || fileErr) === true) {
         return false;
     }
 }
